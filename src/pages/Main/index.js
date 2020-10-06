@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 
@@ -7,26 +7,55 @@ import api from '../../services/api';
 import { Cointaner, Form, SubmitButton, List } from './styles';
 
 const Main = () => {
+   //Estados
    const [newRepo, setNewRepo] = useState('');
    const [repositories, setRepositories] = useState([]);
    const [loading, setLoading] = useState(false);
+   //const [auxiliar, setAuxiliar] = useState('');
 
+   //Função que faz requisão na api
    async function handleSubmit(e) {
       e.preventDefault();
 
       setLoading(true);
 
-      const response = await api.get(`/repos/${newRepo}`);
-      console.log(response.data);
+      try {
+         const response = await api.get(`/repos/${newRepo}`);
+         console.log(response.data);
 
-      const data = {
-         name: response.data.full_name,
-      };
-
-      setNewRepo('');
-      setRepositories([...repositories, data]);
-      setLoading(false);
+         const data = {
+            name: response.data.full_name,
+         };
+         setNewRepo('');
+         setRepositories([...repositories, data]);
+         setLoading(false);
+         //setAuxiliar(data);
+      } catch (err) {
+         alert('Falha ao encontrar o repositório');
+         setNewRepo('');
+         setLoading(false);
+      }
    }
+
+   //console.log(auxiliar);
+
+   //Carregar os dados do localStorage
+   useEffect(() => {
+      const repositories = localStorage.getItem('repositories');
+
+      if (repositories) {
+         setRepositories(JSON.parse(repositories));
+      }
+   }, []);
+
+   //Salvar os dados do localStorage
+   useEffect(() => {
+      localStorage.setItem('repositories', JSON.stringify(repositories));
+   }, [repositories]);
+
+   /*    useEffect(() => {
+      localStorage.removeItem(auxiliar);
+   }, []); */
 
    return (
       <Cointaner>
@@ -56,7 +85,14 @@ const Main = () => {
             {repositories.map((repository) => (
                <li key={repository.name}>
                   <span>{repository.name}</span>
-                  <Link to="">Detalhes</Link>
+                  <Link
+                     to={`/repository/${encodeURIComponent(repository.name)}`}
+                  >
+                     Detalhes
+                  </Link>
+                  {/*                   <button onClick={handleDelete} type="button">
+                     Remover
+                  </button> */}
                </li>
             ))}
          </List>
