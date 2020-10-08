@@ -4,7 +4,8 @@ import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 
 import api from '../../services/api';
 
-import { Cointaner, Form, SubmitButton, List } from './styles';
+import Container from '../../components/container';
+import { Form, SubmitButton, List } from './styles';
 
 const Main = () => {
    //Estados
@@ -58,7 +59,7 @@ const Main = () => {
    }, []); */
 
    return (
-      <Cointaner>
+      <Container>
          <h1>
             <FaGithubAlt />
             Repositórios
@@ -96,7 +97,7 @@ const Main = () => {
                </li>
             ))}
          </List>
-      </Cointaner>
+      </Container>
    );
 };
 
