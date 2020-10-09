@@ -12,7 +12,6 @@ const Main = () => {
    const [newRepo, setNewRepo] = useState('');
    const [repositories, setRepositories] = useState([]);
    const [loading, setLoading] = useState(false);
-   //const [auxiliar, setAuxiliar] = useState('');
 
    //Função que faz requisão na api
    async function handleSubmit(e) {
@@ -30,17 +29,16 @@ const Main = () => {
          setNewRepo('');
          setRepositories([...repositories, data]);
          setLoading(false);
-         //setAuxiliar(data);
       } catch (err) {
-         alert('Falha ao encontrar o repositório');
+         alert(
+            'Falha ao encontrar o repositório, verifique se o nome do repositório está correto'
+         );
          setNewRepo('');
          setLoading(false);
       }
    }
 
-   //console.log(auxiliar);
-
-   //Carregar os dados do localStorage
+   //Carrega os dados do localStorage
    useEffect(() => {
       const repositories = localStorage.getItem('repositories');
 
@@ -49,13 +47,14 @@ const Main = () => {
       }
    }, []);
 
-   //Salvar os dados do localStorage
+   //Salva os dados do localStorage
    useEffect(() => {
       localStorage.setItem('repositories', JSON.stringify(repositories));
    }, [repositories]);
 
-   /*    useEffect(() => {
-      localStorage.removeItem(auxiliar);
+   /*    //Limpa todos os dados do localStorage
+   useEffect(() => {
+      localStorage.clear();
    }, []); */
 
    return (
